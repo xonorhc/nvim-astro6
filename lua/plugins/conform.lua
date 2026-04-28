@@ -61,8 +61,17 @@ return {
     format_on_save = function(bufnr)
       if vim.F.if_nil(vim.b[bufnr].autoformat, vim.g.autoformat, true) then return { lsp_format = "fallback" } end
     end,
+    timeout_ms = 3000,
     formatters_by_ft = {
-      sql = { "pg_format", "sql-formatter", "sqlfmt", stop_after_first = true },
+      sql = { "sqlfluff", "pg_format", stop_after_first = true },
+    },
+    formatters = {
+      sqlfluff = {
+        append_args = { "--templater", "raw", "--dialect", "postgres" },
+      },
+      pg_format = {
+        append_args = { "--no-extra-line", "--nogrouping", "--function-case", "1", "--keep-newline", "--format-type" },
+      },
     },
   },
 }
